@@ -13,7 +13,7 @@ def index():
         cats = response.json()
         cat_pics = []
     except requests.exceptions.HTTPError as HTTPError:
-        return render_template("error.html", error = f"HTTP Error: {HTTPError})
+        return render_template("error.html", error = f"HTTP Error: {HTTPError}")
     else:
         for cat in cats:
             try:
