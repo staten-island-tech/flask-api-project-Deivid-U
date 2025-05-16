@@ -1,16 +1,21 @@
-from flask import Flask, render_template, session
+from flask import Flask, render_template, session, redirect, url_for, request
 import requests
 
 app = Flask(__name__)
 
 app.secret_key = "Cats18273645"
 
-@app.route("/")
+@app.route("/", methods=["GET", "POST"])
 def index():
+    if request.method == "POST":
+        tag = request.form.get("tag")
+        if tag:
+            return redirect(url_for("filter_by_tag", tag=tag))
+        
     try:
         response = requests.get("https://cataas.com/api/cats?limit=100")
         cats = response.json()
-        cat_pics = []
+        cat_data = []
     except requests.exceptions.HTTPError as HTTPError:
         return render_template("error.html", error = f"HTTP Error: {HTTPError}")
     else:
@@ -24,7 +29,7 @@ def index():
             except KeyError:
                 continue
             else:
-                cat_pics.append({
+                cat_data.append({
                     'id': id,
                     'image': image_url,
                     'filetype': filetype,
@@ -32,15 +37,15 @@ def index():
                     'tags': tags
                 })
 
-        session['cat_details'] = cat_pics
+        session['cat_details'] = cat_data
         
-        return render_template("index.html", cat_pics = cat_pics) 
+        return render_template("index.html", cat_data = cat_data) 
 
 @app.route("/cats/<int:id>")
 def cat(id):
     try:
-        cat_pics = session.get("cat_details")
-        this_cat = cat_pics[id]
+        cat_data = session.get("cat_details")
+        this_cat = cat_data[id]
     except None:
         return render_template("error.html", error = "Cats not loaded. Return to the homepage.")
     except KeyError:
@@ -48,12 +53,12 @@ def cat(id):
     else:
         return render_template("cat.html", this_cat = this_cat)
 
-@app.route("/filter/<str:tag>")
-def cat(tag):
+@app.route("/filter/<string:tag>")
+def filter(tag):
     try:
-        response = requests.get("https://cataas.com/api/cats?limit=100")
+        response = requests.get("https://cataas.com/api/cats?limit=1987")
         cats = response.json()
-        cat_pics = []
+        cat_data = []
     except requests.exceptions.HTTPError as HTTPError:
         return render_template("error.html", error = f"HTTP Error: {HTTPError}")
     else:
@@ -68,7 +73,7 @@ def cat(tag):
             except KeyError:
                 continue
             else:
-                cat_pics.append({
+                cat_data.append({
                     'id': id,
                     'image': image_url,
                     'filetype': filetype,
@@ -76,9 +81,9 @@ def cat(tag):
                     'tags': tags
                 })
 
-        session["tagged_cat_details"] = cat_pics
+        session["tagged_cat_details"] = cat_data
 
-        return render_template("index.html", cat_pics = cat_pics) 
+        return render_template("index.html", cat_data = cat_data) 
 
 if __name__ == '__main__':
 
