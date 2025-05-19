@@ -10,7 +10,7 @@ def index():
     if request.method == "POST":
         tag = request.form.get("tag")
         if tag:
-            return redirect(url_for("filter_by_tag", tag=tag))
+            return redirect(url_for("", tag=tag))
         
     try:
         response = requests.get("https://cataas.com/api/cats?limit=100")
