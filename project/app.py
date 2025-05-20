@@ -10,7 +10,7 @@ def index():
     if request.method == "POST":
         tag = request.form.get("tag")
         if tag:
-            return redirect(url_for("", tag=tag))
+            return redirect(url_for("filter", tag=tag))
         
     try:
         response = requests.get("https://cataas.com/api/cats?limit=100")
@@ -22,13 +22,11 @@ def index():
         for cat in cats:
             try:
                 id = cat["id"]
-                filetype = cat["mimetype"].strip("image/")
+                filetype = cat["mimetype"].replace("image/", "")
                 image_url = f"https://cataas.com/cat/{id}.{filetype}"
                 date = cat["createdAt"]
                 tags = cat["tags"]
-            except KeyError:
-                continue
-            else:
+
                 cat_data.append({
                     'id': id,
                     'image': image_url,
@@ -36,7 +34,9 @@ def index():
                     'date': date,
                     'tags': tags
                 })
-
+            except KeyError:
+                continue
+                
         session['cat_details'] = cat_data
         
         return render_template("index.html", cat_data = cat_data) 
@@ -53,7 +53,7 @@ def cat(id):
     else:
         return render_template("cat.html", this_cat = this_cat)
 
-@app.route("/filter/<string:tag>")
+@app.route("/filter/<string:tag>", methods = ["GET", "POST"])
 def filter(tag):
     try:
         response = requests.get("https://cataas.com/api/cats?limit=1987")
@@ -70,16 +70,16 @@ def filter(tag):
                     filetype = cat["mimetype"].strip("image/")
                     image_url = f"https://cataas.com/cat/{id}.{filetype}"
                     date = cat["createdAt"]
+
+                    cat_data.append({
+                        'id': id,
+                        'image': image_url,
+                        'filetype': filetype,
+                        'date': date,
+                        'tags': tags
+                    })             
             except KeyError:
                 continue
-            else:
-                cat_data.append({
-                    'id': id,
-                    'image': image_url,
-                    'filetype': filetype,
-                    'date': date,
-                    'tags': tags
-                })
 
         session["tagged_cat_details"] = cat_data
 
