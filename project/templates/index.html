@@ -7,17 +7,21 @@
   </head>
   <body>
     <h1>CAT IMAGES YIPPEEEE!</h1>
-    {{% if %}}
     <form method="POST">
       <input type="text" name="tag" placeholder="Enter ONE singular tag (e.g., cute)">
       <button type="submit">Filter by Tag</button>
     </form>
+    {% if cat_data %}   
     <div class="cat-grid">
       {% for cat in cat_data %}
       <div class="cat-card">
-          <img src="{{ cat.image }}">
+        <img src="{{ cat.image }}">
       </div>
       {% endfor %}
     </div>
+    {% else %}
+    <h2>No Cat Data</h2>
+    <p>You've got no cat data, punk. If you found this after searching for some obscure made up tag, try searching for a real one instead.</p>
+    {% endif %}
   </body>
 </html>

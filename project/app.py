@@ -55,6 +55,11 @@ def cat(id):
 
 @app.route("/filter/<string:tag>", methods = ["GET", "POST"])
 def filter(tag):
+    if request.method == "POST":
+        tag = request.form.get("tag")
+        if tag:
+            return redirect(url_for("filter", tag=tag))
+    
     try:
         response = requests.get("https://cataas.com/api/cats?limit=1987")
         cats = response.json()
