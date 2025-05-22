@@ -23,7 +23,7 @@ def index():
             try:
                 id = cat["id"]
                 filetype = cat["mimetype"].replace("image/", "")
-                image_url = f"https://cataas.com/cat/{id}.{filetype}"
+                image_url = f"https://cataas.com/cat/{id}"
                 date = cat["createdAt"]
                 tags = cat["tags"]
 
@@ -46,8 +46,10 @@ def cat(id):
     try:
         cat_data = session.get("cat_details")
         this_cat = cat_data[id]
-    except None:
-        return render_template("error.html", error = "Cats not loaded. Return to the homepage.")
+    except cat_data is None:
+        return render_template("error.html", error = "Cats could not be loaded. Return to the homepage.")
+    except this_cat is None:
+        return render_template("error.html", error = "We don't got that cat pal.")
     except KeyError:
         return render_template("error.html", error = "Session Key Error")
     else:
@@ -73,7 +75,7 @@ def filter(tag):
                 if tag in tags:
                     id = cat["id"]
                     filetype = cat["mimetype"].strip("image/")
-                    image_url = f"https://cataas.com/cat/{id}.{filetype}"
+                    image_url = f"https://cataas.com/cat/{id}"
                     date = cat["createdAt"]
 
                     cat_data.append({
