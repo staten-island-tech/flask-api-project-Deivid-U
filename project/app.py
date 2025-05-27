@@ -41,19 +41,22 @@ def index():
         
         return render_template("index.html", cat_data = cat_data) 
 
-@app.route("/cats/<int:id>")
+@app.route("/cats/<string:id>")
 def cat(id):
     try:
         cat_data = session.get("cat_details")
         this_cat = cat_data[id]
-    except cat_data is None:
-        return render_template("error.html", error = "Cats could not be loaded. Return to the homepage.")
-    except this_cat is None:
-        return render_template("error.html", error = "We don't got that cat pal.")
+    except TypeError:
+        return render_template("error.html", error = "Type Error")
     except KeyError:
         return render_template("error.html", error = "Session Key Error")
     else:
         return render_template("cat.html", this_cat = this_cat)
+    
+"""         if cat_data is None:
+            raise ValueError("cat_data is None")  # raise an exception if needed """
+"""     except ValueError:
+        return render_template("error.html", error = "We don't got that cat pal.") """
 
 @app.route("/filter/<string:tag>", methods = ["GET", "POST"])
 def filter(tag):

@@ -15,7 +15,9 @@
     <div class="cat-grid">
       {% for cat in cat_data %}
       <div class="cat-card">
-        <img src="{{ cat.image }}">
+        <a href="{{ url_for('cat', id=cat.id) }}">
+          <img src="{{ cat.image }}">
+        </a>
       </div>
       {% endfor %}
     </div>
