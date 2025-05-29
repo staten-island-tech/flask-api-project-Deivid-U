@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8">
+    <title>Cool Specific Cat</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}"/>
+  </head>
+  <body>
+    {% if this_cat %}
+    <h1>This is the cat with id: {{ this_cat.id }} </h1>
+    <div class="cat-card">
+      <img src="{{ this_cat.image }}">
+    </div>
+    {% else %}
+    <h2>Your cat isn't real.</h2>
+    <p>I genuinely have no idea how you got this html to load without an error. Your cat did not load. Not even one bit of data.</p>
+    {% endif %}
+  </body>
+</html>
