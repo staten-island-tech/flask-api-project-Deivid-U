@@ -9,7 +9,12 @@
     {% if this_cat %}
     <h1>This is the cat with id: {{ this_cat.id }} </h1>
     <div class="cat-card">
-      <img src="{{ this_cat.image }}">
+      <div class= "cat_image">
+        <img src="{{ this_cat.image_url }}">
+      </div>
+      <p>CatAAS Image URL: {{ this_cat.image_url }}</p>
+      <p>Tags: {{ this_cat.tags }}</p>
+      <p>Created At: {{ this_cat.createdAt }}</p>
     </div>
     {% else %}
     <h2>Your cat isn't real.</h2>

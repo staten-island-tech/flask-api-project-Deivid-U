@@ -24,14 +24,14 @@ def index():
                 id = cat["id"]
                 filetype = cat["mimetype"].replace("image/", "")
                 image_url = f"https://cataas.com/cat/{id}"
-                date = cat["createdAt"]
+                createdAt = cat["createdAt"]
                 tags = cat["tags"]
 
                 cat_data.append({
                     'id': id,
-                    'image': image_url,
+                    'image_url': image_url,
                     'filetype': filetype,
-                    'date': date,
+                    'createdAt': createdAt,
                     'tags': tags
                 })
             except KeyError:
@@ -83,7 +83,7 @@ def filter(tag):
 
                     cat_data.append({
                         'id': id,
-                        'image': image_url,
+                        'image_url': image_url,
                         'filetype': filetype,
                         'date': date,
                         'tags': tags

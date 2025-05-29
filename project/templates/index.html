@@ -3,7 +3,7 @@
   <head>
     <meta charset="UTF-8">
     <title>Awesome Cat Image Thingy</title>
-    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}"/>
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}"/>
   </head>
   <body>
     <h1>CAT IMAGES YIPPEEEE!</h1>
@@ -16,7 +16,7 @@
       {% for cat in cat_data %}
       <div class="cat-card">
         <a href="{{ url_for('cat', id=cat.id) }}">
-          <img src="{{ cat.image }}">
+          <img src="{{ cat.image_url }}">
         </a>
       </div>
       {% endfor %}
