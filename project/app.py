@@ -8,9 +8,9 @@ app.secret_key = "Cats18273645"
 @app.route("/", methods=["GET", "POST"])
 def index():
     if request.method == "POST":
-        tag = request.form.get("tag")
-        if tag:
-            return redirect(url_for("filter", tag=tag))
+        entered_tag = request.form.get("tag")
+        if entered_tag:
+            return redirect(url_for("filter", tag = entered_tag))
         
     try:
         response = requests.get("https://cataas.com/api/cats?limit=50", timeout = 10)
@@ -68,9 +68,9 @@ def cat(id):
 @app.route("/filter/<string:tag>", methods = ["GET", "POST"])
 def filter(tag):
     if request.method == "POST":
-        tag = request.form.get("tag")
-        if tag:
-            return redirect(url_for("filter", tag=tag))
+        entered_tag = request.form.get("tag")
+        if entered_tag:
+            return redirect(url_for("filter", tag = entered_tag))
     
     try:
         response = requests.get("https://cataas.com/api/cats?limit=1987") #limit is equal to the total # of cats in the API to ensure we get every result for more obscure tags
@@ -87,7 +87,7 @@ def filter(tag):
 
         for cat in cats:
             try:
-                tags = cat["tags"]
+                tags = cat["tags"] #the API's tags are sensitive to capitalization (eg. "Angry" and "angry" are different tags), so I am not using .lower() as to maintain the API's tag system
 
                 if tag in tags and len(cat_data) <= 50: #because all cats are retrieved for filtering in this page, the total number of cats for a given tag is capped at 50 to fit the data in the session cookie
                     id = cat["id"]
@@ -109,7 +109,7 @@ def filter(tag):
             session['cat_details'] = cat_data
             return render_template("index.html", cat_data = cat_data) 
         else: #if every single cat was not formatted properly it loads an error page
-            return render_template("error.html", error = "No valid data was retrieved from the API.")
+            return render_template("error.html", error = "No valid data was retrieved from the API. Try searching for a different tag, and note that tags.")
 
 if __name__ == '__main__':
 
