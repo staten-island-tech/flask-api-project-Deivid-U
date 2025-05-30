@@ -30,14 +30,14 @@ def index():
                 id = cat["id"]
                 filetype = cat["mimetype"].replace("image/", "")
                 image_url = f"https://cataas.com/cat/{id}"
-                createdAt = cat["createdAt"]
+                created_at = cat["createdAt"]
                 tags = cat["tags"]
 
                 cat_data.append({
                     'id': id,
                     'image_url': image_url,
                     'filetype': filetype,
-                    'createdAt': createdAt,
+                    'created_at': created_at,
                     'tags': tags
                 })
             except KeyError:
@@ -93,13 +93,13 @@ def filter(tag):
                     id = cat["id"]
                     filetype = cat["mimetype"].strip("image/")
                     image_url = f"https://cataas.com/cat/{id}"
-                    date = cat["createdAt"]
+                    created_at = cat["createdAt"]
 
                     cat_data.append({
                         'id': id,
                         'image_url': image_url,
                         'filetype': filetype,
-                        'date': date,
+                        'created_at': created_at,
                         'tags': tags
                     })             
             except KeyError:
@@ -109,7 +109,7 @@ def filter(tag):
             session['cat_details'] = cat_data
             return render_template("index.html", cat_data = cat_data) 
         else: #if every single cat was not formatted properly it loads an error page
-            return render_template("error.html", error = "No valid data was retrieved from the API. Try searching for a different tag, and note that tags.")
+            return render_template("error.html", error = "No valid data was retrieved from the API. Try searching for a different tag, and note that tags are sensitive to capitaliztion.")
 
 if __name__ == '__main__':
 

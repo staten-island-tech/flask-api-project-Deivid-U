@@ -3,23 +3,26 @@
   <head>
     <meta charset="UTF-8">
     <title>Cool Specific Cat</title>
-    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}"/>
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}"/>
   </head>
   <body>
     {% if this_cat %}
     <h1>
       <a href="{{ url_for('index')}}">My Awesome Cat Pictures Website!</a>
     </h1>
+    <h2>Specific Cat Details</h2>
     <div class="specific-cat-container">
       <img src="{{ this_cat.image_url }}">
-      <p>ID: {{ this_cat.id }}</p>
-      <p>CatAAS Image URL: {{ this_cat.image_url }}</p>
-      <p>Tags: {{ this_cat.tags }}</p>
-      <p>Created At: {{ this_cat.createdAt }}</p>
+      <div class="p-container">
+        <p>ID: {{ this_cat.id }}</p>
+        <p>CatAAS Image URL: {{ this_cat.image_url }}</p>
+        <p>Tags: {{ this_cat.tags }}</p>
+        <p>Created At: {{ this_cat.created_at }}</p>
+      </div>
     </div>
     {% else %}
-    <h2>Your cat isn't real.</h2>
-    <p>I genuinely have no idea how you got this html to load without an error. Your cat did not load. Not even one bit of data.</p>
+    <h2>No Cat Found</h2>
+    <p>The requested cat was not found. Click on the header to return to the home page.</p>
     {% endif %}
   </body>
 </html>

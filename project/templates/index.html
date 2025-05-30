@@ -10,10 +10,11 @@
       <a href="{{ url_for('index')}}">My Awesome Cat Pictures Website!</a>
     </h1>
     <form method="POST">
-      <input type="text" name="tag" placeholder="Enter ONE singular tag (e.g., cute)">
+      <input type="text" name="tag" placeholder="Enter one tag (e.g., cute)">
       <button type="submit">Filter by Tag</button>
     </form>
-    {% if cat_data %}   
+    {% if cat_data %}
+    <h2>Grid of Cat Pictures</h2>   
     <div class="cat-grid">
       {% for cat in cat_data %}
       <div class="cat-card">
@@ -25,7 +26,7 @@
     </div>
     {% else %}
     <h2>No Cat Data</h2>
-    <p>You've got no cat data, punk. If you found this after searching for some obscure made up tag, try searching for a real one instead.</p>
+    <p>No cat data was found. If you got this error after searching for a tag, the tag is most likely not in the original API. Note that tags are sensitive to capitalization.</p>
     {% endif %}
   </body>
 </html>
