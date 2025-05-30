@@ -31,8 +31,10 @@ def index():
                 filetype = cat["mimetype"].replace("image/", "")
                 image_url = f"https://cataas.com/cat/{id}"
                 created_at = cat["createdAt"]
-                tags = cat["tags"]
+                tags = []
 
+                for cat_tag in cat["tags"]:
+                    tags.append(cat_tag.lower())
                 cat_data.append({
                     'id': id,
                     'image_url': image_url,
@@ -87,7 +89,9 @@ def filter(tag):
 
         for cat in cats:
             try:
-                tags = cat["tags"] #the API's tags are sensitive to capitalization (eg. "Angry" and "angry" are different tags), so I am not using .lower() as to maintain the API's tag system
+                tags = []
+                for cat_tag in cat["tags"]:
+                    tags.append(cat_tag.lower())
 
                 if tag in tags and len(cat_data) <= 50: #because all cats are retrieved for filtering in this page, the total number of cats for a given tag is capped at 50 to fit the data in the session cookie
                     id = cat["id"]

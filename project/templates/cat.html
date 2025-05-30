@@ -16,7 +16,11 @@
       <div class="p-container">
         <p>ID: {{ this_cat.id }}</p>
         <p>CatAAS Image URL: {{ this_cat.image_url }}</p>
-        <p>Tags: {{ this_cat.tags }}</p>
+        {% if this_cat.tags %}
+          <p>Tags: {{ this_cat.tags }}</p>
+        {% else %}
+          <p>No Tags</p>
+        {% endif %}
         <p>Created At: {{ this_cat.created_at }}</p>
       </div>
     </div>
