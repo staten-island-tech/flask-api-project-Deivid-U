@@ -21,8 +21,8 @@ h1, h2 {
     background-color: white;
     border-radius: 8px;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-    width: 750px;
-    height: 750px; 
+    width: 500px;
+    height: 500px; 
     box-sizing: border-box;
     padding: 15px;
     display: flex;
@@ -30,10 +30,10 @@ h1, h2 {
     align-items: center;
   }
   
-.cat_card img {
+.cat-card img {
     width: 100%;
-    max-width: 600px;
-    height: 750px;
+    max-width: 450px;
+    height: 450px;
     overflow: hidden;
     border-radius: 4px;
     background-color: #ddd; /* fallback background */

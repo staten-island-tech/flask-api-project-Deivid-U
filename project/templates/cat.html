@@ -7,11 +7,14 @@
   </head>
   <body>
     {% if this_cat %}
-    <h1>This is the cat with id: {{ this_cat.id }} </h1>
+    <h1>
+      <a href="{{ url_for('index')}}">Awesome Cat Pictures!!!</a>
+    </h1>
     <div class="cat-card">
       <div class= "cat_image">
         <img src="{{ this_cat.image_url }}">
       </div>
+      <p>ID: {{ cat.id }}</p>
       <p>CatAAS Image URL: {{ this_cat.image_url }}</p>
       <p>Tags: {{ this_cat.tags }}</p>
       <p>Created At: {{ this_cat.createdAt }}</p>
