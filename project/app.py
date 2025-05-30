@@ -47,19 +47,19 @@ def index():
             session['cat_details'] = cat_data
             return render_template("index.html", cat_data = cat_data) 
         else: #if every single cat was not formatted properly it loads an error page
-            return render_template("error.html", error = "No valid JSON data was retrieved from the API.")
+            return render_template("error.html", error = "No valid data was retrieved from the API.")
 
 @app.route("/cats/<string:id>")
 def cat(id):
     cat_data = session.get("cat_details")
     
     if cat_data is None:
-        return render_template("error.html", error = "No cat data found in session. Please go back to the homepage.")
+        return render_template("error.html", error = "No cat data found in session. Click on the header to return to the homepage.")
     else:
         try:
             this_cat = next(cat for cat in cat_data if cat["id"] == id)
         except StopIteration:
-            return render_template("error.html", error="Cat not found.")
+            return render_template("error.html", error = "Cat not found.")
         except TypeError:
             return render_template("error.html", error = "Invalid cat data in session.")
         else:
@@ -88,7 +88,7 @@ def filter(tag):
         for cat in cats:
             try:
                 tags = cat["tags"]
-                
+
                 if tag in tags and len(cat_data) <= 50: #because all cats are retrieved for filtering in this page, the total number of cats for a given tag is capped at 50 to fit the data in the session cookie
                     id = cat["id"]
                     filetype = cat["mimetype"].strip("image/")
@@ -109,7 +109,7 @@ def filter(tag):
             session['cat_details'] = cat_data
             return render_template("index.html", cat_data = cat_data) 
         else: #if every single cat was not formatted properly it loads an error page
-            return render_template("error.html", error = "No valid JSON data was retrieved from the API.")
+            return render_template("error.html", error = "No valid data was retrieved from the API.")
 
 if __name__ == '__main__':
 
