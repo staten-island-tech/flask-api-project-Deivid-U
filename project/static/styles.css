@@ -9,6 +9,11 @@ h1, h2 {
     text-align: center;
     color: #333;
   }
+
+p {
+    margin: 10px 0;
+    color: #555;
+  }
   
 .cat-grid {
     display: flex;
@@ -42,7 +47,3 @@ h1, h2 {
     justify-content: center;
   }
   
-p {
-    margin: 10px 0;
-    color: #555;
-  }

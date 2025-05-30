@@ -13,12 +13,18 @@ def index():
             return redirect(url_for("filter", tag=tag))
         
     try:
-        response = requests.get("https://cataas.com/api/cats?limit=50")
+        response = requests.get("https://cataas.com/api/cats?limit=50", timeout = 10)
+        response.raise_for_status()       
         cats = response.json()
-        cat_data = []
-    except requests.exceptions.HTTPError as HTTPError:
-        return render_template("error.html", error = f"HTTP Error: {HTTPError}")
+    except requests.exceptions.HTTPError as http_error:
+        return render_template("error.html", error = f"HTTP Error: {http_error}")
+    except requests.exceptions.RequestException as request_error:
+        return render_template("error.html", error = f"Request Error: {request_error}")
+    except ValueError as json_error:
+        return render_template("error.html", error = f"Invalid JSON: {json_error}")
     else:
+        cat_data = []
+
         for cat in cats:
             try:
                 id = cat["id"]
@@ -35,28 +41,29 @@ def index():
                     'tags': tags
                 })
             except KeyError:
-                continue
+                continue #if any individual cat is not formatted properly the code just keeps iterating
                 
-        session['cat_details'] = cat_data
-        
-        return render_template("index.html", cat_data = cat_data) 
+        if len(cat_data) > 0:
+            session['cat_details'] = cat_data
+            return render_template("index.html", cat_data = cat_data) 
+        else: #if every single cat was not formatted properly it loads an error page
+            return render_template("error.html", error = "No valid JSON data was retrieved from the API.")
 
 @app.route("/cats/<string:id>")
 def cat(id):
-    try:
-        cat_data = session.get("cat_details")
-        this_cat = next((cat for cat in cat_data if cat["id"] == id), None)
-    except TypeError:
-        return render_template("error.html", error = "Type Error")
-    except KeyError:
-        return render_template("error.html", error = "Session Key Error")
-    else:
-        return render_template("cat.html", this_cat = this_cat)
+    cat_data = session.get("cat_details")
     
-"""         if cat_data is None:
-            raise ValueError("cat_data is None")  # raise an exception if needed """
-"""     except ValueError:
-        return render_template("error.html", error = "We don't got that cat pal.") """
+    if cat_data is None:
+        return render_template("error.html", error = "No cat data found in session. Please go back to the homepage.")
+    else:
+        try:
+            this_cat = next(cat for cat in cat_data if cat["id"] == id)
+        except StopIteration:
+            return render_template("error.html", error="Cat not found.")
+        except TypeError:
+            return render_template("error.html", error = "Invalid cat data in session.")
+        else:
+            return render_template("cat.html", this_cat = this_cat)
 
 @app.route("/filter/<string:tag>", methods = ["GET", "POST"])
 def filter(tag):
@@ -67,15 +74,22 @@ def filter(tag):
     
     try:
         response = requests.get("https://cataas.com/api/cats?limit=1987") #limit is equal to the total # of cats in the API to ensure we get every result for more obscure tags
+        response.raise_for_status()
         cats = response.json()
-        cat_data = []
-    except requests.exceptions.HTTPError as HTTPError:
-        return render_template("error.html", error = f"HTTP Error: {HTTPError}")
+    except requests.exceptions.HTTPError as http_error:
+        return render_template("error.html", error = f"HTTP Error: {http_error}")
+    except requests.exceptions.RequestException as request_error:
+        return render_template("error.html", error = f"Request Error: {request_error}")
+    except ValueError as json_error:
+        return render_template("error.html", error = f"Invalid JSON: {json_error}")
     else:
+        cat_data = []
+
         for cat in cats:
             try:
                 tags = cat["tags"]
-                if tag in tags and len(cat_data) <= 50: #Capped at 50 to fit the data in the session cookie
+                
+                if tag in tags and len(cat_data) <= 50: #because all cats are retrieved for filtering in this page, the total number of cats for a given tag is capped at 50 to fit the data in the session cookie
                     id = cat["id"]
                     filetype = cat["mimetype"].strip("image/")
                     image_url = f"https://cataas.com/cat/{id}"
@@ -89,11 +103,13 @@ def filter(tag):
                         'tags': tags
                     })             
             except KeyError:
-                continue
+                continue #keeps iterating if an individual cat is improperly formatted
 
-        session["cat_details"] = cat_data
-
-        return render_template("index.html", cat_data = cat_data) 
+        if len(cat_data) > 0:
+            session['cat_details'] = cat_data
+            return render_template("index.html", cat_data = cat_data) 
+        else: #if every single cat was not formatted properly it loads an error page
+            return render_template("error.html", error = "No valid JSON data was retrieved from the API.")
 
 if __name__ == '__main__':
 
