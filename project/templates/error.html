@@ -6,7 +6,10 @@
     <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}"/>
   </head>
   <body>
-    <h1>ERROR</h1>
+    <h1>
+      <a href="{{ url_for('index')}}">My Awesome Cat Pictures Website!</a>
+    </h1>
+    <h2>An Error Has Occured</h2>
     <p>{{ error }}</p>
   </body>
 </html>
